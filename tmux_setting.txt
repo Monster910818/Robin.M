@@ -1,0 +1,71 @@
+# 解除键绑定
+unbind C-b
+unbind C-z
+unbind n
+
+set -g prefix C-s                                               # 重设PREFIX
+bind r source-file ~/.tmux.conf \; display "Conf Reloaded!"     # 将r键设置为加载配置文件，并显示"reloaded!"信息
+bind C-s setw synchronize-panes                                 # 开启/关闭 pane 同步模式
+set -g history-limit 50000
+
+bind -n C-t    new-window -c "#{pane_current_path}"             # 新建window
+bind -n C-PgUp previous-window                                  # 上一个window
+bind -n C-PgDn next-window                                      # 下一个window
+bind -n C-n    next-window                                      # 下一个window
+
+setw -g mode-keys vi                                            # copy-mode将快捷键设置为vi模式
+set -g repeat-time 300                                          # 带-r标志的键重复时间
+set -g base-index 1                                             # 窗口序号默认从1开始
+set -g pane-base-index 1                                        # 面板序号从1开始
+
+# 设置鼠标
+set -g mouse off                                                # 鼠标默认关闭
+bind m set -w mouse on
+bind M set -w mouse off
+bind -n WheelUpPane copy-mode                                   # 向上滚动鼠标开启 copy 模式
+
+# pane 颜色
+set -g pane-border-fg white
+set -g pane-active-border-fg red
+
+# message 颜色
+set -g message-fg red
+set -g message-bg black
+set -g message-attr bold
+
+# 设置窗口列表颜色
+setw -g window-status-attr default
+setw -g window-status-format "  #[fg=cyan][#[fg=blue]#W#[fg=cyan]]"
+
+# 设置当前窗口在 status bar 中的颜色
+setw -g window-status-current-attr bold
+setw -g window-status-current-format "#[fg=yellow]⛰️ #[fg=red][#[fg=yellow]#W#[fg=red]]"
+
+# 设置 status bar 格式
+set -g status-bg default
+set -g status-left-length 12
+set -g status-left  "#[fg=black]#{?pane_synchronized,#[bg=yellow] Session: #S ,#[fg=blue] Session: #S }"
+set -g status-right "#[fg=blue]%R"
+set -g status-interval 60
+set -g status-justify centre
+
+# 分割窗口
+unbind '"'
+bind - splitw -v -c "#{pane_current_path}" # 分割成上下两个窗口
+unbind %
+bind \ splitw -h -c "#{pane_current_path}" # 分割成左右两个窗口
+bind -r k       select-pane -U
+bind -r j       select-pane -D
+bind -r h       select-pane -L
+bind -r l       select-pane -R
+
+# 调整 pane 大小
+bind -r Up      resize-pane -U 5
+bind -r Down    resize-pane -D 5
+bind -r Left    resize-pane -L 10
+bind -r Right resize-pane -R 10
+
+#开启window事件提示  
+setw -g monitor-activity on  
+set -g visual-activity on 
+
